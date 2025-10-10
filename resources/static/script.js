@@ -6,6 +6,8 @@ let SITE_URL = "-";
 let CONFIG = null;
 let SUBDIR = null;
 let ADMIN = false;
+let LOCAL_DATA = [];
+let CUR_PAGE = 0;
 
 // Buttons
 // https://svgicons.com/icon/10648/copy-outline
@@ -20,6 +22,10 @@ SVG_DELETE_BUTTON = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="
 SVG_OPEN_EYE = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 9.75a2.25 2.25 0 1 0 0 4.5a2.25 2.25 0 0 0 0-4.5"/><path fill="currentColor" fill-rule="evenodd" d="M12 5.5c-2.618 0-4.972 1.051-6.668 2.353c-.85.652-1.547 1.376-2.036 2.08c-.48.692-.796 1.418-.796 2.067c0 .649.317 1.375.796 2.066c.49.705 1.186 1.429 2.036 2.08C7.028 17.45 9.382 18.5 12 18.5c2.618 0 4.972-1.051 6.668-2.353c.85-.652 1.547-1.376 2.035-2.08c.48-.692.797-1.418.797-2.067c0-.649-.317-1.375-.797-2.066c-.488-.705-1.185-1.429-2.035-2.08C16.972 6.55 14.618 5.5 12 5.5M8.25 12a3.75 3.75 0 1 1 7.5 0a3.75 3.75 0 0 1-7.5 0" clip-rule="evenodd"/></svg>`;
 // https://svgicons.com/icon/10687/eye-closed-solid
 SVG_CLOSED_EYE = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M20.53 4.53a.75.75 0 0 0-1.06-1.06l-16 16a.75.75 0 1 0 1.06 1.06l3.035-3.035C8.883 18.103 10.392 18.5 12 18.5c2.618 0 4.972-1.051 6.668-2.353c.85-.652 1.547-1.376 2.035-2.08c.48-.692.797-1.418.797-2.067c0-.649-.317-1.375-.797-2.066c-.488-.705-1.185-1.429-2.035-2.08c-.27-.208-.558-.41-.86-.601zm-5.4 5.402l-1.1 1.098a2.25 2.25 0 0 1-3 3l-1.1 1.1a3.75 3.75 0 0 0 5.197-5.197" clip-rule="evenodd"/><path fill="currentColor" d="M12.67 8.31a.26.26 0 0 0 .23-.07l1.95-1.95a.243.243 0 0 0-.104-.407A10.214 10.214 0 0 0 12 5.5c-2.618 0-4.972 1.051-6.668 2.353c-.85.652-1.547 1.376-2.036 2.08c-.48.692-.796 1.418-.796 2.067c0 .649.317 1.375.796 2.066a9.287 9.287 0 0 0 1.672 1.79a.246.246 0 0 0 .332-.017l2.94-2.94a.26.26 0 0 0 .07-.23a3.75 3.75 0 0 1 4.36-4.36"/></svg>`;
+// https://svgicons.com/icon/10926/skip-prev-outline
+SVG_PREV_BUTTON = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><title>Skip-prev-outline SVG Icon</title><path fill="currentColor" d="M6.75 7a.75.75 0 0 0-1.5 0v10a.75.75 0 0 0 1.5 0z"/><path fill="currentColor" fill-rule="evenodd" d="M9.393 13.253a1.584 1.584 0 0 1 0-2.505a25.76 25.76 0 0 1 7.143-3.902l.466-.165c1.023-.364 2.1.329 2.238 1.381c.34 2.59.34 5.286 0 7.876c-.138 1.052-1.215 1.745-2.238 1.381l-.466-.165a25.758 25.758 0 0 1-7.143-3.902m.918-1.32a.084.084 0 0 0 0 .133a24.257 24.257 0 0 0 6.727 3.674l.466.166c.1.035.232-.033.249-.163c.322-2.46.322-5.025 0-7.486a.194.194 0 0 0-.25-.163l-.465.166c-2.423.86-4.694 2.1-6.727 3.674" clip-rule="evenodd"/></svg>`;
+// https://svgicons.com/icon/10924/skip-next-outline
+SVG_NEXT_BUTTON = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><title>Skip-next-outline SVG Icon</title><path fill="currentColor" fill-rule="evenodd" d="M14.607 10.748c.82.634.82 1.87 0 2.505a25.758 25.758 0 0 1-7.143 3.9l-.466.166c-1.023.364-2.1-.329-2.238-1.381c-.34-2.59-.34-5.286 0-7.876c.138-1.052 1.215-1.745 2.238-1.381l.466.165a25.76 25.76 0 0 1 7.143 3.902m-.918 1.318a.084.084 0 0 0 0-.132A24.257 24.257 0 0 0 6.962 8.26l-.466-.166a.194.194 0 0 0-.249.163a29.063 29.063 0 0 0 0 7.486c.017.13.15.198.25.163l.465-.166c2.423-.86 4.694-2.1 6.727-3.674M18 6.25a.75.75 0 0 1 .75.75v10a.75.75 0 0 1-1.5 0V7a.75.75 0 0 1 .75-.75" clip-rule="evenodd"/></svg>`;
 
 // in miliseconds
 const UNITS = {
@@ -125,12 +131,29 @@ const refreshData = async () => {
     }
     showVersion();
     if (ADMIN) {
-      const res = await fetch(prepSubdir("/api/all"), { cache: "no-cache" });
+      const params = new URLSearchParams();
+      if (LOCAL_DATA.length == 0) {
+        params.append("page_size", "20");
+      } else {
+        if (LOCAL_DATA.at(-1).length == 0) {
+          console.log("Reached the end of URLs.");
+          return;
+        }
+        params.append("page_size", "10");
+        params.append("page_after", LOCAL_DATA.at(-1).at(-1)["shortlink"]);
+      }
+      const res = await fetch(prepSubdir(`/api/all?${params}`), {
+        cache: "no-cache",
+      });
       if (res.status == 200) {
         const data = await res.json();
         await getConfig();
         ADMIN = true;
-        displayData(data.reverse());
+        LOCAL_DATA.push(data.reverse().slice(0, 10));
+        if (LOCAL_DATA.length == 1) {
+          LOCAL_DATA.push(data.slice(10, 20));
+        }
+        displayData();
       } else {
         throw Error("There was an error getting data.");
       }
@@ -147,6 +170,26 @@ const refreshData = async () => {
   }
 };
 
+const gotoPrevPage = () => {
+  document.getElementById("prevPageBtn").disabled = true;
+  document.getElementById("nextPageBtn").disabled = true;
+  if (CUR_PAGE > 0) {
+    CUR_PAGE -= 1;
+  }
+  displayData();
+};
+
+const gotoNextPage = () => {
+  document.getElementById("prevPageBtn").disabled = true;
+  document.getElementById("nextPageBtn").disabled = true;
+  CUR_PAGE += 1;
+  if (CUR_PAGE >= LOCAL_DATA.length - 1) {
+    refreshData();
+  } else {
+    displayData();
+  }
+};
+
 const updateInputBox = () => {
   if (CONFIG.allow_capital_letters) {
     const input_box = document.getElementById("shortUrl");
@@ -156,7 +199,12 @@ const updateInputBox = () => {
   }
 };
 
-const displayData = (data) => {
+const displayData = () => {
+  if (CUR_PAGE < 0) {
+    console.log("Trying to access negative numbered page.");
+    return;
+  }
+  const data = LOCAL_DATA.at(CUR_PAGE);
   showVersion();
   const admin_button = document.getElementById("admin-button");
   admin_button.innerText = "logout";
@@ -176,10 +224,21 @@ const displayData = (data) => {
     table_box.hidden = false;
     table.innerHTML = "";
     for (const [i, row] of data.entries()) {
-      table.appendChild(TR(i + 1, row));
+      table.appendChild(TR(CUR_PAGE * 10 + i + 1, row));
     }
     setTimeout(refreshExpiryTimes, 1000);
   }
+
+  const prevPageBtn = document.getElementById("prevPageBtn");
+  const nextPageBtn = document.getElementById("nextPageBtn");
+  const on_first_page = CUR_PAGE == 0;
+  const on_last_page = LOCAL_DATA.at(CUR_PAGE + 1).length == 0;
+  if (on_first_page && on_last_page) {
+    prevPageBtn.hidden = true;
+    nextPageBtn.hidden = true;
+  }
+  prevPageBtn.disabled = on_first_page;
+  nextPageBtn.disabled = on_last_page;
 };
 
 const showAlert = (text, col) => {
@@ -642,6 +701,17 @@ refreshData()
         passEye.innerHTML = SVG_OPEN_EYE;
       }
       document.getElementById("password").focus();
+    };
+
+    const prevPageBtn = document.getElementById("prevPageBtn");
+    prevPageBtn.innerHTML = SVG_PREV_BUTTON;
+    prevPageBtn.onclick = () => {
+      gotoPrevPage();
+    };
+    const nextPageBtn = document.getElementById("nextPageBtn");
+    nextPageBtn.innerHTML = SVG_NEXT_BUTTON;
+    nextPageBtn.onclick = () => {
+      gotoNextPage();
     };
 
     const qrCodeDialog = document.getElementById("qr-code-dialog");
