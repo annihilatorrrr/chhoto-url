@@ -1049,6 +1049,33 @@ refreshData()
       }
     };
 
+    // Block outside touches when dialog is open
+    document.addEventListener(
+      "touchstart",
+      (event) => {
+        const dialog = [...document.querySelectorAll("dialog[open]")].findLast(
+          (dialog) => dialog.matches(":modal"),
+        );
+
+        if (!dialog) return;
+
+        const touch = event.touches[0];
+        const rect = dialog.getBoundingClientRect();
+
+        const inside =
+          touch.clientX >= rect.left &&
+          touch.clientX <= rect.right &&
+          touch.clientY >= rect.top &&
+          touch.clientY <= rect.bottom;
+
+        if (!inside) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+        }
+      },
+      { capture: true, passive: false },
+    );
+
     const editDialog = document.getElementById("edit-dialog");
     editDialog.onclose = () => {
       document.getElementById("container").style.filter = "blur(0px)";
